@@ -33,7 +33,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.path !== '/login') {//所有不是前往login页面的路由都会被拦截
     if(!getLocalStorage("AccessToken")){//token过期或不存在
-      next('/login')
+      next('/signal')
     }
     else{
       next()
