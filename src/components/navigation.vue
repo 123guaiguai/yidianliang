@@ -7,7 +7,7 @@
         </svg>
         <h3>心理园地</h3>
       </div>
-      <span  class="navigation-item" style="color: #85c5ff">首页</span>
+      <span class="navigation-item" style="color: #85c5ff" @click="navigate('/')">首页</span>
       <div class="breakLine"></div>
       <span class="navigation-item">阅读</span>
       <div class="breakLine"></div>
@@ -24,7 +24,12 @@
         content="进入个人中心"
         class="person"
       >
-        <svg class="icon icon-person" aria-hidden="true" slot="reference">
+        <svg
+          class="icon icon-person"
+          aria-hidden="true"
+          slot="reference"
+          @click="navigate('/personalcenter')"
+        >
           <use xlink:href="#icon-gerenzhongxin"></use>
         </svg>
       </el-popover>
@@ -50,7 +55,11 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    navigate(path) {
+      this.$router.push(path);
+    },
+  },
 };
 </script>
 
@@ -87,19 +96,19 @@ export default {
         border: 0;
       }
     }
-    .person,.SOS {
-      height:100%;
-      border:0;
-      margin-left:20px;
-      .icon{
-        width:30px;
-        height:100%;
-        
+    .person,
+    .SOS {
+      height: 100%;
+      border: 0;
+      margin-left: 20px;
+      .icon {
+        width: 30px;
+        height: 100%;
       }
     }
     .navigation-item {
       font-size: 14px;
-      height:72px;
+      height: 72px;
       padding: 0 30px;
       line-height: 72px;
     }
@@ -108,16 +117,16 @@ export default {
       background-color: #f3f4f5;
       cursor: pointer;
     }
-    .breakLine{
-        height:25px;
-        width:0;
-        border-left:1px dashed #cccccc;
+    .breakLine {
+      height: 25px;
+      width: 0;
+      border-left: 1px dashed #cccccc;
     }
-    .logout{
-      font-size:15px;
-      color:#5aa8f0;
-      margin-left:100px;
-      cursor:pointer;
+    .logout {
+      font-size: 15px;
+      color: #5aa8f0;
+      margin-left: 100px;
+      cursor: pointer;
     }
   }
 }

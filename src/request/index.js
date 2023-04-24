@@ -1,6 +1,6 @@
 import axios from "axios"
 let service=axios.create({
-    baseURL:'/api',//后面填上后端根地址
+    baseURL:'http://8.130.92.216:8081/',//后面填上后端根地址
     timeout:5000,
     headers:{
         "Content-Type":"application/json;charset=utf-8"//定义传输的是json文件
@@ -13,13 +13,14 @@ service.interceptors.request.use((config)=>{
     }
     return config
 })
-// service.interceptors.response.use((res)=>{
-//     const status=res.status
-//     if(status!==200){//响应体中的status不是200，错误
-//         return Promise.reject(res.data)
-//     }
-//     return res.data
-// },(err)=>{
-//     console.log(err);
-// })
+service.interceptors.response.use((res)=>{
+    const code=res.code
+    if(code!==1){//响应体中的code不是1，错误
+        console.log("请求失败！");
+        return Promise.reject(res.data)
+    }
+    return res.data
+},(err)=>{
+    console.log(err);
+})
 export default service

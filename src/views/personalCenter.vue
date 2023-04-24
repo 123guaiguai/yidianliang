@@ -1,0 +1,136 @@
+<template>
+  <div class="wrapper">
+    <Navigation></Navigation>
+    <div class="display">
+      <el-container>
+        <el-aside width="200px">
+          <div class="display-aside">
+            <div
+              :class="['option', item.title ? 'title' : '']"
+              v-for="(item, index) in asideList"
+              :key="index"
+              @click="changeTitle(item.text, item.title)"
+            >
+              <span class="text">{{ item.text }}</span>
+              <span :class="['iconfont', item.title ? item.icon : '']"></span>
+            </div>
+          </div>
+        </el-aside>
+        <el-main>
+          <div class="display-main-header">
+            {{ showTitle }}
+          </div>
+          <div class="display-main-show">
+            <router-view></router-view>
+          </div>
+        </el-main>
+      </el-container>
+    </div>
+  </div>
+</template>
+
+<script>
+import navigation from "@/components/navigation.vue";
+export default {
+  components: {
+    Navigation: navigation,
+  },
+  data() {
+    return {
+      asideList: [
+        { title: true, text: "管理通知", icon: "icon-xiaoxi" },
+        { title: false, text: "系统通知" },
+        { title: false, text: "消息" },
+        { title: false, text: "评论回答" },
+        { title: false, text: "私信聊天" },
+        { title: true, text: "我的服务", icon: "icon--fuwu" },
+        { title: false, text: "预约订单" },
+        { title: false, text: "课程中心" },
+        { title: true, text: "内容管理", icon: "icon-neirongguanli" },
+        { title: false, text: "我的收藏" },
+        { title: true, text: "账号信息", icon: "icon-zhanghao" },
+        { title: false, text: "基本信息" },
+        { title: false, text: "修改信息" },
+        { title: false, text: "更新头像" },
+        { title: false, text: "修改密码" },
+        { title: false, text: "绑定手机" },
+      ],
+      showTitle: "系统通知",
+    };
+  },
+  methods: {
+    changeTitle(text, title) {
+      if (title) {
+        return;
+      }
+      this.showTitle = text;
+      //this.$router.push("/personalcenter/modifyInfor");
+    },
+  },
+};
+</script>
+
+<style lang="less" scoped>
+.wrapper {
+  width: 100%;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .display {
+    width: 70%;
+    padding: 30px 0;
+    .display-aside {
+      width: 180px;
+      background-color: white;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+
+      .option {
+        margin-left: 50px;
+        width: 60%;
+        height: 60px;
+        line-height: 60px;
+        position: relative;
+        color: #333333;
+        font-size: 18px;
+        cursor: pointer;
+        &:hover {
+          color: #0b8bff;
+        }
+        &.title {
+          font-size: 16px;
+          color: #9fa19f;
+          margin-top: 40px;
+          .iconfont {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -30px;
+            font-size: 20px;
+          }
+          &:first-child {
+            margin-top: 0px;
+          }
+        }
+      }
+    }
+    .display-main-header {
+      height: 60px;
+      background-color: white;
+      line-height: 60px;
+      border-radius: 10px;
+      font-size: 18px;
+      padding-left: 30px;
+      color: #9fa19f;
+      margin-bottom: 30px;
+    }
+    .display-main-show {
+      background-color: white;
+      height: 400px;
+      border-radius: 10px;
+    }
+  }
+}
+</style>

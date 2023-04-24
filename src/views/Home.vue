@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <Navigation></Navigation>
+    <Navigation ></Navigation>
     <el-carousel height="290px">
       <el-carousel-item v-for="(item, index) in swiperList" :key="index">
         <img :src="item" alt="" class="swiperImg" />
@@ -274,6 +274,8 @@ export default {
       ],
     };
   },
+  methods: {
+  },
 };
 </script>
 
@@ -408,7 +410,8 @@ export default {
         width: 100%;
         height: 68px;
         display: flex;
-        align-items: center;
+        align-items: flex-end;
+        margin-bottom: 20px;
         .title {
           font-family: PingFangSC-Medium;
           font-size: 24px;
@@ -501,7 +504,7 @@ export default {
         }
         .introduction:hover {
           transform: translateY(-8px);
-          box-shadow: -4px 4px 4px 4px #f3f3f3;
+          box-shadow: 0 0 4px 4px #f3f3f3;
         }
         .introduction:hover .detail {
           opacity: 0;
@@ -521,7 +524,7 @@ export default {
     display: flex;
     justify-content: center;
     background-color: #f3f4f5;
-    height:600px;
+    height: 600px;
     .test {
       width: 70%;
       display: flex;

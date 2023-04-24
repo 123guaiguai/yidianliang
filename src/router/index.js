@@ -1,9 +1,30 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {getLocalStorage} from "../utils/localStorageExceed"
+import { getLocalStorage } from "../utils/localStorageExceed"
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/personalcenter',
+    name: 'personalcenter',
+    redirect: '/personalcenter/basicInfor',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/personalCenter.vue'),
+    children: [
+      {
+        path: 'basicInfor',
+        name: 'basicInfor',
+        component: () => import('../childrenView/personalCenter/basicInformation.vue')
+      },
+      {
+        path: 'modifyInfor',
+        name: 'modifyInfor',
+        component: () => import('../childrenView/personalCenter/modifyInformation.vue')
+      }
+    ]
+  },
   {
     path: '/',
     name: 'home',
@@ -18,10 +39,10 @@ const routes = [
     component: () => import('../views/Login.vue')
   },
   {
-    path:'/signal',
-    name:'signal',
-    component:()=>import('../views/Signal.vue')
-  }
+    path: '/signal',
+    name: 'signal',
+    component: () => import('../views/Signal.vue')
+  },
 ]
 
 const router = new VueRouter({
