@@ -1,25 +1,27 @@
 import axios from "axios"
+import {getLocalStorage} from "../utils/localStorageExceed"
 let service=axios.create({
-    baseURL:'http://8.130.92.216:8081/',//后面填上后端根地址
+    baseURL:'/api',//后面填上后端根地址
     timeout:5000,
     headers:{
         "Content-Type":"application/json;charset=utf-8"//定义传输的是json文件
     }
 })
 service.interceptors.request.use((config)=>{
-    config.headers=config.headers||{}
-    if(localStorage.getItem('AccessToken')){
-        config.headers.token=localStorage.getItem('AccessToken')||""//本地token存在，则携带在请求头
+    config.headers=config.headers||{};
+    let token=getLocalStorage('AccessToken',true)||"";
+    if(token){
+        config.headers.token=token//本地token存在，则携带在请求头
     }
     return config
 })
 service.interceptors.response.use((res)=>{
-    const code=res.code
+    const code=res.data.code
     if(code!==1){//响应体中的code不是1，错误
         console.log("请求失败！");
         return Promise.reject(res.data)
     }
-    return res.data
+    return res.data.data
 },(err)=>{
     console.log(err);
 })

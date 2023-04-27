@@ -9,7 +9,7 @@
               :class="['option', item.title ? 'title' : '']"
               v-for="(item, index) in asideList"
               :key="index"
-              @click="changeTitle(item.text, item.title)"
+              @click="changeTitle(item.text, item.title,item.path)"
             >
               <span class="text">{{ item.text }}</span>
               <span :class="['iconfont', item.title ? item.icon : '']"></span>
@@ -49,22 +49,26 @@ export default {
         { title: true, text: "内容管理", icon: "icon-neirongguanli" },
         { title: false, text: "我的收藏" },
         { title: true, text: "账号信息", icon: "icon-zhanghao" },
-        { title: false, text: "基本信息" },
-        { title: false, text: "修改信息" },
-        { title: false, text: "更新头像" },
-        { title: false, text: "修改密码" },
+        { title: false, text: "基本信息" ,path:'basicInfor'},
+        { title: false, text: "修改信息",path:'modifyInfor' },
+        { title: false, text: "更新头像",path:'modifyHeaderPhoto' },
+        { title: false, text: "修改密码",path:"modifyPassword" },
         { title: false, text: "绑定手机" },
       ],
       showTitle: "系统通知",
+      path:'basicInfor'
     };
   },
   methods: {
-    changeTitle(text, title) {
+    changeTitle(text, title, path) {
       if (title) {
         return;
       }
       this.showTitle = text;
-      //this.$router.push("/personalcenter/modifyInfor");
+      if(path&&this.path!==path){
+        this.path=path;
+        this.$router.push(`/personalcenter/${path}`);
+      }
     },
   },
 };
@@ -128,7 +132,7 @@ export default {
     }
     .display-main-show {
       background-color: white;
-      height: 400px;
+      min-height: 400px;
       border-radius: 10px;
     }
   }

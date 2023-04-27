@@ -124,7 +124,7 @@
 
 <script>
 import checkStrength from "../utils/checkPasswordStrength.js";
-import { login, register } from "../request/api/home.js";
+import { login, register } from "../request/api/user.js";
 import { setLocalStorage, getLocalStorage } from "../utils/localStorageExceed";
 import { mapMutations, mapState } from "vuex";
 export default {
@@ -190,27 +190,35 @@ export default {
           };
           let resData; //保存后端返回结果
           if (type === "login") {
+            console.log(formData);
             resData = await login(formData);
+            console.log(resData);
+            if(!resData){
+              return this.open("登陆失败！");
+            }
           } else {
             formData = { ...formData, userType: this.radio }; //identity为1，2，3,代表学生，家长，医师
             resData = await register(formData);
+            if(!resData){
+              return this.open("注册失败！");
+            }
           }
 
-          console.log(resData); //下面是处理逻辑
-          if (resData.status !== 200) {
+          //console.log(resData); //下面是处理逻辑
+          if (resData==="注册成功！") {
             //处理错误的请求，一般是弹出警告弹窗
-            alert(resData.data.msg);
-          } else {
+            return this.open("注册成功!请登陆");
+          } else if(resData.user){
             //把AccessToken和用户标识userToken储存
-            console.log("wolaile");
-            const { token, userId, userType } = resData.data.data;
-            setLocalStorage("AccessToken", token, userId, userType);
-            this.updateUserId(userId); //userId储存在vuex中
+            const { id, userType } = resData.user;
+            setLocalStorage("AccessToken", resData.token, id, userType);
+            this.updateUserId(id); //userId储存在vuex中
             this.updateUserType(userType); //userType储存在vuex中
+            this.open("登陆成功！");
             this.$router.replace("/"); //跳转到主页面
           }
         } else {
-          console.log("error submit!!");
+          this.open("表单验证未通过！");
           return false;
         }
       });
@@ -231,6 +239,9 @@ export default {
         this.$refs.registerBox.classList.add("hidden");
         this.$refs.loginBox.classList.remove("hidden");
       }
+    },
+    open(message) {
+      this.$message(message);
     },
     ...mapMutations(["updateUserId", "updateUserType"]),
   },

@@ -1,5 +1,6 @@
 <template>
   <div class="signal-container">
+    <span class="iconfont icon-fanhui5" @click="$router.go(-1)"></span>
     <div class="step">
       <div class="step-ring">
         <div class="step-counter"></div>
@@ -50,39 +51,43 @@
     <div class="heart-rate"></div>
     <div class="blood-rate"></div>
     <div class="sleep-time"></div>
-    <lastSignalPanelVue ref="lastSignal" :lastData="lastSignal"></lastSignalPanelVue>
+    <lastSignalPanelVue
+      ref="lastSignal"
+      :lastData="lastSignal"
+    ></lastSignalPanelVue>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import { getHeartRate, getLast } from "../request/api/home";
 import { getLocalStorage } from "@/utils/localStorageExceed";
 import lastSignalPanelVue from "@/components/lastSignalPanel.vue";
+import { getLastData, getLastSevenData } from "@/request/api/physiology";
 export default {
-  components:{
-    lastSignalPanelVue
+  components: {
+    lastSignalPanelVue,
   },
   methods: {
-    showTip(value){
-      if(!this.lock){
+    showTip(value) {
+      if (!this.lock) {
         this.updateLock(true);
         this.$refs.lastSignal.showDisplayBox(value);
       }
     },
-    async getAllHeartAndBloodRate() {//在这里获取数组数据
+    async getAllHeartAndBloodRate() {
+      //在这里获取数组数据
       let resData;
-      if (!this.userId) {
-        const { Id } = getLocalStorage("AccessToken");
-        this.updateUserId(Id);
-        resData = await getHeartRate({ userId: Id });
+      if (this.cacheSevenSignalData) {
+        resData = this.cacheSevenSignalData;
       } else {
-        resData = await getHeartRate({ userId: this.userId });
+        resData = await getLastSevenData();
+        //保存最近七天的缓存信息
+        this.updatecacheSevenSignalData(resData);
       }
-      //console.log(resData);
-      if (resData.status === 200) {
+      console.log("全部数据", resData);
+      if (resData) {
         //数据初始化
-        const heartsAndBloods = resData.data.data; //拿到心率和血压有关数组。进行预处理
+        const heartsAndBloods = resData; //拿到心率和血压有关数组。进行预处理
         //console.log(heartsAndBloods);
         this.allHeartRate = heartsAndBloods.map((item) => {
           return item.heartRate;
@@ -103,23 +108,28 @@ export default {
         });
         //console.log(this.allBloodRate);
       } else {
-        alert(resData.data.msg);
+        this.open("请求最近七天生理数据失败！");
       }
       this.heartRate();
       this.bloodRate();
       this.sleepRate();
     },
-    async getStep() {//在这里获取单次数据
+    async getStep() {
+      //在这里获取单次数据
       let resData;
-      if (!this.userId) {
-        const { Id } = getLocalStorage("AccessToken");
-        this.updateUserId(Id);
-        resData = await getLast({ userId: Id });
+      if (this.cacheLastSignalData) {
+        resData = this.cacheLastSignalData;
       } else {
-        resData = await getLast({ userId: this.userId });
+        resData = await getLastData();
+        //保存最近一天的缓存信息
+        this.updatecacheLastSignalData(resData);
       }
-      //console.log(resData);
-      const stepData = resData.data.data;
+      console.log("最近生理数据", resData);
+      if (!resData) {
+        return this.open("获取最近生理数据失败！");
+      }
+
+      const stepData = resData;
       this.step = {
         climb: stepData.climb,
         distance: stepData.distance,
@@ -501,7 +511,15 @@ export default {
       option.series[1].data = this.temperature;
       chart_sleepRate.setOption(option);
     },
-    ...mapMutations(["updateUserId","updateLock"]),
+    open(message) {
+      this.$message(message);
+    },
+    ...mapMutations([
+      "updateUserId",
+      "updateLock",
+      "updatecacheLastSignalData",
+      "updatecacheSevenSignalData",
+    ]),
   },
   mounted() {
     this.getAllHeartAndBloodRate();
@@ -519,7 +537,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userId","lock"]),
+    ...mapState([
+      "userId",
+      "lock",
+      "cacheLastSignalData",
+      "cacheSevenSignalData",
+    ]),
   },
 };
 </script>
@@ -530,11 +553,19 @@ export default {
   height: 100%;
   background: rgba(242, 242, 244);
   padding: 2px;
-  position:relative;
+  position: relative;
+  overflow-x: hidden;
   //   display: flex;
   //   flex-direction: column;
   //   justify-content: center;
   //   align-items: center;
+  .icon-fanhui5 {
+    position: absolute;
+    color: #0b8bff;
+    font-size: 50px;
+    left: 30px;
+    top: 40px;
+  }
   .step {
     margin: 20px auto;
     width: 420px;
@@ -686,7 +717,7 @@ export default {
     position: absolute;
     right: 20px;
     bottom: 50px;
-    transition:all .3s
+    transition: all 0.3s;
   }
 }
 </style>

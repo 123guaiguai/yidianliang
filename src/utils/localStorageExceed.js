@@ -7,7 +7,7 @@ export function setLocalStorage(key,token,id,type){//设置能过期的localStor
     }
     localStorage.setItem(key,JSON.stringify(storageData))
 }
-export function getLocalStorage(key){//取出localStore,如未过期，返回id和token,否则返回null
+export function getLocalStorage(key,flag){//取出localStore,如未过期，返回id和token,否则返回null
     if(!localStorage.getItem(key)){
         return null;
     }
@@ -16,6 +16,9 @@ export function getLocalStorage(key){//取出localStore,如未过期，返回id�
     if((data.date)/1000+7*24*3600<now){//token设置七天过期
         localStorage.removeItem(key)//清除过期token
         return null;
+    }
+    if(flag===true){//如果传入flag参数，那么直接返回保存的token
+        return data.token
     }
     else{
         return {

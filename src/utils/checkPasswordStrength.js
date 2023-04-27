@@ -11,4 +11,5 @@ export default function checkStrength(passwd) {
             flag: false
         }
     }
+    
 }

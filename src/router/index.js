@@ -22,7 +22,17 @@ const routes = [
         path: 'modifyInfor',
         name: 'modifyInfor',
         component: () => import('../childrenView/personalCenter/modifyInformation.vue')
-      }
+      },
+      {
+        path:'modifyPassword',
+        name:'modifyPassword',
+        component:()=>import('../childrenView/personalCenter/modifyPassword.vue')
+      },
+      {
+        path:'modifyHeaderPhoto',
+        name:'modifyHeaderPhoto',
+        component:()=>import('../childrenView/personalCenter/modifyHeaderPhoto.vue')
+      },
     ]
   },
   {
@@ -51,17 +61,17 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.path !== '/login') {//所有不是前往login页面的路由都会被拦截
-//     if(!getLocalStorage("AccessToken")){//token过期或不存在
-//       next('/login')
-//     }
-//     else{
-//       next()
-//     }
-//   }
-//   else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.path !== '/login') {//所有不是前往login页面的路由都会被拦截
+    if(!getLocalStorage("AccessToken")){//token过期或不存在
+      next('/login')
+    }
+    else{
+      next()
+    }
+  }
+  else {
+    next()
+  }
+})
 export default router

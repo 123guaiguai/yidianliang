@@ -1,7 +1,7 @@
 <template>
   <div id="container">
-    <Navigation ></Navigation>
-    <el-carousel height="290px">
+    <Navigation></Navigation>
+    <el-carousel height="290px" loop>
       <el-carousel-item v-for="(item, index) in swiperList" :key="index">
         <img :src="item" alt="" class="swiperImg" />
       </el-carousel-item>
@@ -24,115 +24,18 @@
       </div>
       <div class="exhibition">
         <!-- 这里是要v-for循环的 -->
-        <div class="exhibition-item">
-          <img
-            src="https://ossimg.xinli001.com/20230314/0573b41660006f588b34f554a3aa1757.jpeg!120x120"
-            alt=""
-          />
+        <div
+          class="exhibition-item"
+          v-for="item in articlesList"
+          :key="item.id"
+        >
+          <img :src="item.picturePath" alt="" />
           <div class="text">
             <div class="article-title">
-              极度渴望爱与关注-22个克服拖延的黄金句型
+              {{ item.title }}
             </div>
             <div class="article-desc">
-              在DBT-辩证行为疗法下，22条心理暗示给你带来不一样的效果。
-            </div>
-          </div>
-        </div>
-        <div class="exhibition-item">
-          <img
-            src="https://ossimg.xinli001.com/20230314/0573b41660006f588b34f554a3aa1757.jpeg!120x120"
-            alt=""
-          />
-          <div class="text">
-            <div class="article-title">
-              极度渴望爱与关注-22个克服拖延的黄金句型
-            </div>
-            <div class="article-desc">
-              在DBT-辩证行为疗法下，22条心理暗示给你带来不一样的效果。
-            </div>
-          </div>
-        </div>
-        <div class="exhibition-item">
-          <img
-            src="https://ossimg.xinli001.com/20230314/0573b41660006f588b34f554a3aa1757.jpeg!120x120"
-            alt=""
-          />
-          <div class="text">
-            <div class="article-title">
-              极度渴望爱与关注-22个克服拖延的黄金句型
-            </div>
-            <div class="article-desc">
-              在DBT-辩证行为疗法下，22条心理暗示给你带来不一样的效果。
-            </div>
-          </div>
-        </div>
-        <div class="exhibition-item">
-          <img
-            src="https://ossimg.xinli001.com/20230314/0573b41660006f588b34f554a3aa1757.jpeg!120x120"
-            alt=""
-          />
-          <div class="text">
-            <div class="article-title">
-              极度渴望爱与关注-22个克服拖延的黄金句型
-            </div>
-            <div class="article-desc">
-              在DBT-辩证行为疗法下，22条心理暗示给你带来不一样的效果。
-            </div>
-          </div>
-        </div>
-        <div class="exhibition-item">
-          <img
-            src="https://ossimg.xinli001.com/20230314/0573b41660006f588b34f554a3aa1757.jpeg!120x120"
-            alt=""
-          />
-          <div class="text">
-            <div class="article-title">
-              极度渴望爱与关注-22个克服拖延的黄金句型
-            </div>
-            <div class="article-desc">
-              在DBT-辩证行为疗法下，22条心理暗示给你带来不一样的效果。
-            </div>
-          </div>
-        </div>
-        <div class="exhibition-item">
-          <img
-            src="https://ossimg.xinli001.com/20230314/0573b41660006f588b34f554a3aa1757.jpeg!120x120"
-            alt=""
-          />
-          <div class="text">
-            <div class="article-title">
-              极度渴望爱与关注-22个克服拖延的黄金句型
-            </div>
-            <div class="article-desc">
-              在DBT-辩证行为疗法下，22条心理暗示给你带来不一样的效果。
-            </div>
-          </div>
-        </div>
-        <div class="exhibition-item">
-          <img
-            src="https://ossimg.xinli001.com/20230314/0573b41660006f588b34f554a3aa1757.jpeg!120x120"
-            alt=""
-          />
-          <div class="text">
-            <div class="article-title">
-              极度渴望爱与关注-22个克服拖延的黄金句型
-            </div>
-            <div class="article-desc">
-              在DBT-辩证行为疗法下，22条心理暗示给你带来不一样的效果。
-            </div>
-          </div>
-        </div>
-        <div class="exhibition-item">
-          <img
-            src="https://ossimg.xinli001.com/20230314/0573b41660006f588b34f554a3aa1757.jpeg!120x120"
-            alt=""
-          />
-          <div class="text">
-            <div class="article-title">
-              极度渴望爱与关注-22个克服拖延的黄金句型
-            </div>
-            <div class="article-desc">
-              在DBT-辩证行为疗法下，22条心理暗示给你带来不一样的效果。
+              {{ item.content }}
             </div>
           </div>
         </div>
@@ -147,71 +50,24 @@
         </div>
         <div class="psychologist">
           <!-- 这里是要v-for渲染的 -->
-          <div class="introduction">
-            <img
-              src="https://img.ydlcdn.com/file/2019/05/17fb63ce320d4445995d6def8c075451.jpg!s120x120"
-              class="head-picture"
-              alt=""
-            />
+          <div
+            class="introduction"
+            v-for="item in counselorList"
+            :key="item.id"
+          >
+            <img :src="item.picturePath" class="head-picture" alt="" />
             <div class="abstract">
               <div class="detail">
-                <span class="name">朱静</span>
-                <div class="seniority">全职心理咨询师 三级心理咨询师 ...</div>
+                <span class="name">{{ item.name }}</span>
+                <div class="seniority">{{ item.title }}</div>
                 <p class="service">
                   已服务
-                  <span class="number">14606</span>
+                  <span class="number">{{ item.servedNumber }}</span>
                   人
                 </p>
               </div>
               <div class="desc">
-                全职心理咨询师 三级心理咨询师 中级婚姻家庭咨询师
-                EFT婚姻家庭治疗师 中国社区心理援助服务机构会员 ...
-              </div>
-            </div>
-            <div class="consultation">咨询我</div>
-          </div>
-          <div class="introduction">
-            <img
-              src="https://img.ydlcdn.com/file/2019/05/17fb63ce320d4445995d6def8c075451.jpg!s120x120"
-              class="head-picture"
-              alt=""
-            />
-            <div class="abstract">
-              <div class="detail">
-                <span class="name">朱静</span>
-                <div class="seniority">全职心理咨询师 三级心理咨询师 ...</div>
-                <p class="service">
-                  已服务
-                  <span class="number">14606</span>
-                  人
-                </p>
-              </div>
-              <div class="desc">
-                全职心理咨询师 三级心理咨询师 中级婚姻家庭咨询师
-                EFT婚姻家庭治疗师 中国社区心理援助服务机构会员 ...
-              </div>
-            </div>
-            <div class="consultation">咨询我</div>
-          </div>
-          <div class="introduction">
-            <img
-              src="https://img.ydlcdn.com/file/2019/05/17fb63ce320d4445995d6def8c075451.jpg!s120x120"
-              class="head-picture"
-              alt=""
-            />
-            <div class="abstract">
-              <div class="detail">
-                <span class="name">朱静</span>
-                <div class="seniority">全职心理咨询师 三级心理咨询师 ...</div>
-                <p class="service">
-                  已服务
-                  <span class="number">14606</span>
-                  人
-                </p>
-              </div>
-              <div class="desc">
-                全职心理咨询师 三级心理咨询师 中级婚姻家庭咨询师
-                EFT婚姻家庭治疗师 中国社区心理援助服务机构会员 ...
+                {{ item.introduce }}
               </div>
             </div>
             <div class="consultation">咨询我</div>
@@ -251,7 +107,7 @@
               <span class="icon-free">免费</span>
               <span class="number">1120人已上传</span>
             </div>
-            <div class="test-btn">去看看</div>
+            <div class="test-btn" @click="GoSignal">去看看</div>
           </div>
         </div>
       </div>
@@ -261,20 +117,91 @@
 
 <script>
 import Navigation from "../components/navigation.vue";
+import { sliceStr } from "../utils/sliceStr";
+import { mapMutations, mapState } from "vuex";
+import {
+  getSwiperList,
+  getCounselors,
+  getArticles,
+} from "../request/api/index";
+import { articlesList, counselorList, swiperList } from "../source";
 export default {
   components: {
     Navigation: Navigation,
   },
   data() {
     return {
-      swiperList: [
-        "https://s1.ax1x.com/2023/03/15/pp1y0xS.png",
-        "https://s1.ax1x.com/2023/03/15/pp1y0xS.png",
-        "https://s1.ax1x.com/2023/03/15/pp1y0xS.png",
-      ],
+      swiperList: [],
+      articlesList: [],
+      counselorList: [],
     };
   },
   methods: {
+    async getSwiperList() {
+      let data;
+      if (this.cacheSwiperList) {
+        data = this.cacheSwiperList;
+      } else {
+        data = await getSwiperList();
+
+        //缓存轮播图信息
+        this.updatecacheSwiperList(data);
+      }
+
+      if (data) {
+        this.swiperList = data;
+      } else {
+        this.swiperList = swiperList;
+      }
+    },
+    async getCounselors() {
+      let data;
+      if (this.cacheCounselorList) {
+        data = this.cacheCounselorList;
+      } else {
+        data = await getCounselors();
+        this.updatecacheCounselorList(data);
+      }
+      if (data) {
+        data.forEach((item) => {
+          item.introduce = sliceStr(item.introduce);
+        });
+        this.counselorList = data;
+      } else {
+        this.counselorList = counselorList;
+      }
+    },
+    async getArticles() {
+      let data;
+      if (this.cacheArticleList) {
+        data = this.cacheArticleList;
+      } else {
+        data = await getArticles();
+        //缓存最新热文
+        this.updatecacheArticleList(data);
+      }
+      if (data) {
+        this.articlesList = data;
+      } else {
+        this.articlesList = articlesList;
+      }
+    },
+    GoSignal() {
+      this.$router.push("/signal");
+    },
+    ...mapMutations([
+      "updatecacheArticleList",
+      "updatecacheCounselorList",
+      "updatecacheSwiperList",
+    ]),
+  },
+  mounted() {
+    this.getSwiperList();
+    this.getArticles();
+    this.getCounselors();
+  },
+  computed: {
+    ...mapState(["cacheArticleList", "cacheCounselorList", "cacheSwiperList"]),
   },
 };
 </script>
@@ -422,6 +349,7 @@ export default {
           font-size: 16px;
           color: #999;
           transition: all 0.4s;
+          
         }
       }
       .psychologist {
@@ -487,6 +415,7 @@ export default {
               width: 100%;
               font-size: 14px;
               color: #666;
+              cursor: pointer;
             }
           }
 
@@ -500,6 +429,7 @@ export default {
             line-height: 40px;
             margin-bottom: 30px;
             margin-top: 30px;
+            cursor: pointer;
           }
         }
         .introduction:hover {

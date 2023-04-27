@@ -45,7 +45,7 @@
           <use xlink:href="#icon-iconhuizong_huaban1fuben22"></use>
         </svg>
       </el-popover>
-      <span class="logout">退出登陆</span>
+      <span class="logout" @click="loginout">退出登陆</span>
     </div>
   </div>
 </template>
@@ -59,6 +59,10 @@ export default {
     navigate(path) {
       this.$router.push(path);
     },
+    loginout(){
+      localStorage.removeItem('AccessToken');//清除token缓存
+      this.$router.push("/login")
+    }
   },
 };
 </script>
