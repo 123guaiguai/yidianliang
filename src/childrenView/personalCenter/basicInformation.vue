@@ -2,7 +2,7 @@
   <div class="container">
     <div class="personalInfo">
       <div class="headerPhoto">
-        <img :src="headerPhoto" alt="" onerror="faultImg"/>
+        <img :src="headerPhoto" alt="" @error="faultImg"/>
       </div>
       <div class="information">
         <div class="name">

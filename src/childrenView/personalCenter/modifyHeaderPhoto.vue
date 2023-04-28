@@ -5,7 +5,7 @@
       <input type="file" class="chooseFile" @change="onChange" />
     </div>
     <div class="tip">建议尺寸:1MB以内</div>
-    <img :src="avatarPic" alt="" onerror="faultImg" />
+    <img :src="avatarPic" alt="" @error="faultImg" />
     <div class="save" @click="save">保存</div>
   </div>
 </template>
