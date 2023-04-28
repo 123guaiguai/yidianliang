@@ -5,20 +5,20 @@
       <input type="file" class="chooseFile" @change="onChange" />
     </div>
     <div class="tip">建议尺寸:1MB以内</div>
-    <img :src="avatarPic" alt="" />
+    <img :src="avatarPic" alt="" onerror="faultImg" />
     <div class="save" @click="save">保存</div>
   </div>
 </template>
 
 <script>
-import {uploadAvatar} from "../../request/api/person.js"
-import { mapMutations,mapState } from "vuex";
+import { uploadAvatar } from "../../request/api/person.js";
+import { mapMutations, mapState } from "vuex";
+import { defaultImgUrl } from "../../source/index";
 export default {
   data() {
     return {
-      avatarPic:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-      picFile:null,//上传的图片文件
+      avatarPic: defaultImgUrl,
+      picFile: null, //上传的图片文件
     };
   },
   methods: {
@@ -29,48 +29,52 @@ export default {
         return this.open("选择图片的大小要小于1MB");
       }
       if (file.type == "image/jpeg" || file.type == "image/png") {
-        this.picFile=file;
-        let fr=new FileReader();
+        this.picFile = file;
+        let fr = new FileReader();
         fr.readAsDataURL(file);
-        let self=this;
-        fr.onload=function(){
-          self.avatarPic=fr.result;
-        }
+        let self = this;
+        fr.onload = function () {
+          self.avatarPic = fr.result;
+        };
       } else {
         return this.open("请选择jpg或者png格式的图片");
       }
     },
-    async save(){
-      if(!this.picFile){
+    async save() {
+      if (!this.picFile) {
         return this.open("请选择图片再上传");
       }
-      let fileData=new FormData();
-      fileData.append('file',this.picFile);
-      let data=await uploadAvatar(fileData);
-      if(data){
+      let fileData = new FormData();
+      fileData.append("file", this.picFile);
+      let data = await uploadAvatar(fileData);
+      if (data) {
         this.updateAvatarUrl(data);
         this.updateRefresh(true);
         this.open("头像更改成功！");
-      }else{
+      } else {
         this.open("头像更改失败！");
       }
     },
     open(message) {
       this.$message(message);
     },
-    initAvatar(){
-      if(this.avatarUrl){//在vuex中有保存的头像地址
-        return this.avatarPic=this.avatarUrl;
+    faultImg() {
+      this.avatarPic = defaultImgUrl;
+    },
+    initAvatar() {
+      if (this.avatarUrl) {
+        //在vuex中有保存的头像地址
+        return (this.avatarPic = this.avatarUrl);
       }
     },
-    ...mapMutations(['updateAvatarUrl','updateRefresh'])
+    ...mapMutations(["updateAvatarUrl", "updateRefresh"]),
   },
-  computed:{
-    ...mapState(['avatarUrl'])
+  computed: {
+    ...mapState(["avatarUrl"]),
   },
-  mounted(){
+  mounted() {
     this.initAvatar();
-  }
+  },
 };
 </script>
 

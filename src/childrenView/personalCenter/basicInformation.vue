@@ -2,7 +2,7 @@
   <div class="container">
     <div class="personalInfo">
       <div class="headerPhoto">
-        <img :src="headerPhoto" alt="" />
+        <img :src="headerPhoto" alt="" onerror="faultImg"/>
       </div>
       <div class="information">
         <div class="name">
@@ -47,6 +47,7 @@
 <script>
 import { getUserInfo, getUserAvatar } from "../../request/api/person.js";
 import { mapState, mapMutations } from "vuex";
+import {defaultImgUrl} from "../../source/index"
 export default {
   data() {
     return {
@@ -60,14 +61,16 @@ export default {
   methods: {
     async getUserInformation() {
       if (this.userInfo && !this.refresh) {
-        const { address, gender, introduce, username, picturePath } = this.userInfo;
+        const { address, gender, introduce, username, picturePath } =
+          this.userInfo;
         this.name = username;
         this.city = address;
         this.introduction = introduce;
         this.gender = gender;
-        this.headerPhoto =
-          "http://8.130.92.216:8081/common/download?name=" + picturePath;
-          return ;
+        this.headerPhoto = picturePath
+          ? "http://8.130.92.216:8081/common/download?name=" + picturePath
+          : defaultImgUrl;
+        return;
       }
       let data = await getUserInfo();
       if (data) {
@@ -78,10 +81,15 @@ export default {
         this.gender = gender;
         this.headerPhoto =
           "http://8.130.92.216:8081/common/download?name=" + picturePath;
+        if (!picturePath) {
+          this.headerPhoto =
+          defaultImgUrl;
+          data.picturePath =
+          defaultImgUrl;
+        }
         this.updateUserInfo(data); //缓存用户信息
-        this.updateRefresh(false);//保持刷新
+        this.updateRefresh(false); //保持刷新
         this.updateAvatarUrl(picturePath);
-        console.log(picturePath);
       } else {
         this.open("用户数据请求失败！");
       }
@@ -89,7 +97,10 @@ export default {
     open(message) {
       this.$message(message);
     },
-    ...mapMutations(["updateUserInfo",'updateRefresh','updateAvatarUrl']),
+    faultImg(){
+      this.headerPhoto="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png";
+    },
+    ...mapMutations(["updateUserInfo", "updateRefresh", "updateAvatarUrl"]),
   },
   computed: {
     ...mapState(["userInfo", "refresh"]),

@@ -11,7 +11,7 @@
       <div class="breakLine"></div>
       <span class="navigation-item">阅读</span>
       <div class="breakLine"></div>
-      <span class="navigation-item">生理</span>
+      <span class="navigation-item" @click="navigate('/signal')">生理</span>
       <div class="breakLine"></div>
       <span class="navigation-item">心理测试</span>
       <div class="breakLine"></div>

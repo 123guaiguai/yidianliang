@@ -9,7 +9,7 @@
               :class="['option', item.title ? 'title' : '']"
               v-for="(item, index) in asideList"
               :key="index"
-              @click="changeTitle(item.text, item.title,item.path)"
+              @click="changeTitle(item.text, item.title, item.path)"
             >
               <span class="text">{{ item.text }}</span>
               <span :class="['iconfont', item.title ? item.icon : '']"></span>
@@ -38,6 +38,12 @@ export default {
   data() {
     return {
       asideList: [
+        { title: true, text: "账号信息", icon: "icon-zhanghao" },
+        { title: false, text: "基本信息", path: "basicInfor" },
+        { title: false, text: "修改信息", path: "modifyInfor" },
+        { title: false, text: "更新头像", path: "modifyHeaderPhoto" },
+        { title: false, text: "修改密码", path: "modifyPassword" },
+        { title: false, text: "绑定手机" },
         { title: true, text: "管理通知", icon: "icon-xiaoxi" },
         { title: false, text: "系统通知" },
         { title: false, text: "消息" },
@@ -48,15 +54,9 @@ export default {
         { title: false, text: "课程中心" },
         { title: true, text: "内容管理", icon: "icon-neirongguanli" },
         { title: false, text: "我的收藏" },
-        { title: true, text: "账号信息", icon: "icon-zhanghao" },
-        { title: false, text: "基本信息" ,path:'basicInfor'},
-        { title: false, text: "修改信息",path:'modifyInfor' },
-        { title: false, text: "更新头像",path:'modifyHeaderPhoto' },
-        { title: false, text: "修改密码",path:"modifyPassword" },
-        { title: false, text: "绑定手机" },
       ],
       showTitle: "系统通知",
-      path:'basicInfor'
+      path: "basicInfor",
     };
   },
   methods: {
@@ -65,8 +65,8 @@ export default {
         return;
       }
       this.showTitle = text;
-      if(path&&this.path!==path){
-        this.path=path;
+      if (path && this.path !== path) {
+        this.path = path;
         this.$router.push(`/personalcenter/${path}`);
       }
     },

@@ -655,7 +655,7 @@ export default {
     height: 100px;
     background: #ffff;
     border-radius: 20px;
-    box-shadow: -2px 2px #000 2px;
+    box-shadow: 0 0 4px 4px #f3f3f3;
     margin: 50px auto;
     ul {
       width: 100%;
@@ -696,14 +696,14 @@ export default {
     margin: 20px auto;
     background: #ffff;
     border-radius: 30px;
-    box-shadow: 2px 2px #000 2px 2px;
+    box-shadow: 0 0 4px 4px #f3f3f3;
   }
   .blood-rate {
     width: 420px;
     height: 350px;
     background: #ffff;
     border-radius: 30px;
-    box-shadow: 2px 2px #000 2px 2px;
+    box-shadow: 0 0 4px 4px #f3f3f3;
     position: absolute;
     left: 20px;
     bottom: 50px;
@@ -713,7 +713,7 @@ export default {
     height: 350px;
     background: #ffff;
     border-radius: 30px;
-    box-shadow: 2px 2px #000 2px 2px;
+    box-shadow: 0 0 4px 4px #f3f3f3;
     position: absolute;
     right: 20px;
     bottom: 50px;

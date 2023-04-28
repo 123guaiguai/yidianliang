@@ -64,8 +64,10 @@ let swiperList = [
     "https://s1.ax1x.com/2023/03/15/pp1y0xS.png",
     "https://s1.ax1x.com/2023/03/15/pp1y0xS.png",
 ];
+let defaultImgUrl="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png";
 export {
     articlesList,
     counselorList,
-    swiperList
+    swiperList,
+    defaultImgUrl
 };
