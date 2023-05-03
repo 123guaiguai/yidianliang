@@ -94,7 +94,7 @@
               <span class="icon-free">免费</span>
               <span class="number">1920人测试过</span>
             </div>
-            <div class="test-btn">去测试</div>
+            <div class="test-btn" @click="$router.push('/psychoTest')">去测试</div>
           </div>
           <div class="card">
             <img
@@ -107,7 +107,7 @@
               <span class="icon-free">免费</span>
               <span class="number">1120人已上传</span>
             </div>
-            <div class="test-btn" @click="GoSignal">去看看</div>
+            <div class="test-btn" @click="$router.push('/signal')">去看看</div>
           </div>
         </div>
       </div>
@@ -185,9 +185,6 @@ export default {
       } else {
         this.articlesList = articlesList;
       }
-    },
-    GoSignal() {
-      this.$router.push("/signal");
     },
     ...mapMutations([
       "updatecacheArticleList",

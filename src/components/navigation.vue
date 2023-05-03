@@ -13,7 +13,7 @@
       <div class="breakLine"></div>
       <span class="navigation-item" @click="navigate('/signal')">生理</span>
       <div class="breakLine"></div>
-      <span class="navigation-item">心理测试</span>
+      <span class="navigation-item" @click="navigate('/psychoTest')">心理测试</span>
       <div class="breakLine"></div>
       <span class="navigation-item">心理咨询</span>
       <el-popover

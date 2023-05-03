@@ -1,60 +1,63 @@
 <template>
-  <div class="signal-container">
-    <span class="iconfont icon-fanhui5" @click="$router.go(-1)"></span>
-    <div class="step">
-      <div class="step-ring">
-        <div class="step-counter"></div>
-        <div class="step-time"></div>
+  <div class="main-container">
+    <Navigation></Navigation>
+    <div class="signal-container">
+      <!-- <span class="iconfont icon-fanhui5" @click="$router.go(-1)"></span> -->
+      <div class="step">
+        <div class="step-ring">
+          <div class="step-counter"></div>
+          <div class="step-time"></div>
+        </div>
+        <span class="step-show">
+          距离 {{ step.distance }} 公里 | 热量 {{ step.heat }} 千卡 | 爬楼
+          {{ step.climb }} 米
+        </span>
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-xinxikongxin"></use>
+        </svg>
       </div>
-      <span class="step-show">
-        距离 {{ step.distance }} 公里 | 热量 {{ step.heat }} 千卡 | 爬楼
-        {{ step.climb }} 米
-      </span>
-      <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-xinxikongxin"></use>
-      </svg>
+      <div class="navigation">
+        <ul>
+          <li @click="showTip('high')">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-S_mingyiwenzhengaoxieyazhuanqu1"></use>
+            </svg>
+            <span>最高血压</span>
+          </li>
+          <li @click="showTip('low')">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-S_mingyiwenzhengaoxieyazhuanqu"></use>
+            </svg>
+            <span>最低血压</span>
+          </li>
+          <li @click="showTip('heart')">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-tubiaozhizuomoban"></use>
+            </svg>
+            <span>心率</span>
+          </li>
+          <li @click="showTip('sleep')">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shuimian"></use>
+            </svg>
+            <span>睡眠时间</span>
+          </li>
+          <li @click="showTip('temp')">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-wendu"></use>
+            </svg>
+            <span>温度</span>
+          </li>
+        </ul>
+      </div>
+      <div class="heart-rate"></div>
+      <div class="blood-rate"></div>
+      <div class="sleep-time"></div>
+      <lastSignalPanelVue
+        ref="lastSignal"
+        :lastData="lastSignal"
+      ></lastSignalPanelVue>
     </div>
-    <div class="navigation">
-      <ul>
-        <li @click="showTip('high')">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-S_mingyiwenzhengaoxieyazhuanqu1"></use>
-          </svg>
-          <span>最高血压</span>
-        </li>
-        <li @click="showTip('low')">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-S_mingyiwenzhengaoxieyazhuanqu"></use>
-          </svg>
-          <span>最低血压</span>
-        </li>
-        <li @click="showTip('heart')">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-tubiaozhizuomoban"></use>
-          </svg>
-          <span>心率</span>
-        </li>
-        <li @click="showTip('sleep')">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-shuimian"></use>
-          </svg>
-          <span>睡眠时间</span>
-        </li>
-        <li @click="showTip('temp')">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-wendu"></use>
-          </svg>
-          <span>温度</span>
-        </li>
-      </ul>
-    </div>
-    <div class="heart-rate"></div>
-    <div class="blood-rate"></div>
-    <div class="sleep-time"></div>
-    <lastSignalPanelVue
-      ref="lastSignal"
-      :lastData="lastSignal"
-    ></lastSignalPanelVue>
   </div>
 </template>
 
@@ -63,9 +66,11 @@ import { mapState, mapMutations } from "vuex";
 import { getLocalStorage } from "@/utils/localStorageExceed";
 import lastSignalPanelVue from "@/components/lastSignalPanel.vue";
 import { getLastData, getLastSevenData } from "@/request/api/physiology";
+import Navigation from "../components/navigation.vue";
 export default {
   components: {
     lastSignalPanelVue,
+    Navigation,
   },
   methods: {
     showTip(value) {
@@ -548,10 +553,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.main-container{
+  background: rgba(242, 242, 244);
+  height:100vh;
 .signal-container {
   width: 100%;
-  height: 100%;
-  background: rgba(242, 242, 244);
+  // height: 100%;
   padding: 2px;
   position: relative;
   overflow-x: hidden;
@@ -719,5 +726,6 @@ export default {
     bottom: 50px;
     transition: all 0.3s;
   }
+}
 }
 </style>
