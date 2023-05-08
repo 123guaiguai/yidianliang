@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="messageWrapper" v-for="(item,index) in message" :key="index">
+    <div class="messageWrapper" v-for="(item, index) in message" :key="index">
       <div class="message">
         <svg class="icon icon-huizhang" aria-hidden="true" slot="reference">
           <use xlink:href="#icon-maohuizhang"></use>
@@ -10,15 +10,14 @@
           <div class="time">{{ getTime }}</div>
         </div>
         <div class="look" @click="look">
-          <span>{{ roll?"收回":"查看" }}</span>
+          <span>{{ roll ? "收回" : "查看" }}</span>
         </div>
       </div>
-      <div :class="['messageDetail',roll?'active':'']">
+      <div :class="['messageDetail', roll ? 'active' : '']">
         <div class="resultDisplay">
           <div class="result">心理状态:{{ item.result }}</div>
           <div class="suggestion">{{ item.suggestion }}</div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -26,30 +25,31 @@
 
 <script>
 import getNowDate from "../../utils/getNowDate";
-import { mapState,mapMutations } from "vuex";
-import {updateReader} from "../../request/api/questionnaire"
+import { mapState, mapMutations } from "vuex";
+import { updateReader } from "../../request/api/questionnaire";
+import { throttle, debounce } from "../../utils/throttle";
 export default {
   data() {
     return {
-      roll:false
+      roll: false,
     };
   },
   computed: {
     getTime() {
       return getNowDate();
     },
-    ...mapState(['messageCount','message'])
+    ...mapState(["messageCount", "message"]),
   },
-  methods:{
-    async look(){
-      if(this.roll===false){
-        this.updateMessageCount(-1);
-        await updateReader();
-      }
-      this.roll=!this.roll;
-    },
-    ...mapMutations(['updateMessageCount'])
-  }
+  methods: {
+    look:throttle(function () {
+        if (this.roll === false) {
+          this.updateMessageCount(-1);
+          updateReader();
+        }
+        this.roll = !this.roll;
+      }, 100),
+    ...mapMutations(["updateMessageCount"]),
+  },
 };
 </script>
 
@@ -91,30 +91,31 @@ export default {
           border-radius: 10px;
           color: #108dff;
           cursor: pointer;
-          transition: all .3s;
+          transition: all 0.3s;
           user-select: none;
         }
       }
     }
-    .messageDetail{
-      display:flex;
+    .messageDetail {
+      display: flex;
       justify-content: space-around;
       align-items: center;
       overflow: hidden;
-      height:0;
-      transition: all .3s;
-      &.active{
-        height:113px;
-        transition: all .3s;
+      height: 0;
+      transition: all 0.3s;
+      &.active {
+        height: 113px;
+        transition: all 0.3s;
       }
-      .resultDisplay{
-        flex:6;
-        padding:10px 20px;
+      .resultDisplay {
+        flex: 6;
+        padding: 10px 20px;
         box-sizing: border-box;
-        .result,.suggestion{
-          margin-bottom:20px;
-          color:#108dff;
-          font-size:20px;
+        .result,
+        .suggestion {
+          margin-bottom: 20px;
+          color: #108dff;
+          font-size: 20px;
         }
       }
     }
