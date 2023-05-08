@@ -4,6 +4,10 @@
       <span>用户名</span>
       <el-input v-model="formData.name" placeholder="请输入用户名"></el-input>
     </div>
+    <div class="name">
+      <span>微博名</span>
+      <el-input v-model="formData.weiboUsername" placeholder="请输入微博名"></el-input>
+    </div>
     <div class="address">
       <span>所在城市</span>
       <!-- options 可选项数据源，键名可通过 Props 属性配置 array -->
@@ -60,6 +64,7 @@ export default {
         sex: "", //保存性别，1是男生，2是女生
         loc: "", //保存所在城市
         profile: "", //保存我的简介
+        weiboUsername:"",//保存微博名
       },
     };
   },

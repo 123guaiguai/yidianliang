@@ -33,6 +33,11 @@ const routes = [
         name: 'modifyHeaderPhoto',
         component: () => import('../childrenView/personalCenter/modifyHeaderPhoto.vue')
       },
+      {
+        path:'message',
+        name:'message',
+        component:()=>import('../childrenView/personalCenter/message.vue')
+      }
     ]
   },
   {

@@ -7,23 +7,35 @@
         </svg>
         <h3>心理园地</h3>
       </div>
-      <span class="navigation-item" style="color: #85c5ff" @click="navigate('/')">首页</span>
+      <span
+        class="navigation-item"
+        style="color: #85c5ff"
+        @click="navigate('/')"
+        >首页</span
+      >
       <div class="breakLine"></div>
       <span class="navigation-item">阅读</span>
       <div class="breakLine"></div>
       <span class="navigation-item" @click="navigate('/signal')">生理</span>
       <div class="breakLine"></div>
-      <span class="navigation-item" @click="navigate('/psychoTest')">心理测试</span>
+      <span class="navigation-item" @click="navigate('/psychoTest')"
+        >心理测试</span
+      >
       <div class="breakLine"></div>
-      <span class="navigation-item">心理咨询</span>
+      <span class="navigation-item"
+        >心理咨询
+        <span class="messageCount" v-if="messageCount">
+          {{ messageCount }}
+        </span>
+      </span>
       <el-popover
         placement="top-start"
         title=""
-        width="200"
+        width="250"
         trigger="hover"
-        content="进入个人中心"
         class="person"
       >
+        <span>{{`进入个人中心${messageCount?'(您有一条新消息)':''}`}}</span>
         <svg
           class="icon icon-person"
           aria-hidden="true"
@@ -51,19 +63,24 @@
 </template>
 
 <script>
+import { mapState} from 'vuex';
 export default {
   data() {
-    return {};
+    return {
+    };
   },
   methods: {
     navigate(path) {
       this.$router.push(path);
     },
-    loginout(){
-      localStorage.removeItem('AccessToken');//清除token缓存
-      this.$router.push("/login")
-    }
+    loginout() {
+      localStorage.removeItem("AccessToken"); //清除token缓存
+      this.$router.push("/login");
+    },
   },
+  computed:{
+    ...mapState(['messageCount'])
+  }
 };
 </script>
 
@@ -115,6 +132,21 @@ export default {
       height: 72px;
       padding: 0 30px;
       line-height: 72px;
+      position: relative;
+      .messageCount {
+        position: absolute;
+        background-color: rgb(243, 91, 91);
+        color:white;
+        border-radius: 50% 50%;
+        display: inline-block;
+        width:20px;
+        height:20px;
+        text-align: center;
+        line-height: 20px;
+        right:-28px;
+        top:20px;
+        z-index:99;
+      }
     }
     .navigation-item:hover {
       color: #85c5ff;

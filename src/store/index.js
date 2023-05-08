@@ -16,6 +16,8 @@ export default new Vuex.Store({
     cacheSwiperList:null,//用来缓存首页的轮播图信息
     cacheLastSignalData:null,//缓存最新一次的生理数据
     cacheSevenSignalData:null,//缓存最后七天的生理数据
+    messageCount:0,//获取未读信息数量
+    message:[],//保存消息
     // step:{
     //   counter:18081,
     //   minute:24,
@@ -27,6 +29,15 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
+    updateMessage(state,val){
+      state.message.push(val);
+    },
+    updateMessageCount(state,val){
+      state.messageCount+=val;
+      if(state.messageCount<0){
+        state.messageCount=0;
+      }
+    },
     updatecacheArticleList(state,val){
       state.cacheArticleList=val;
     },

@@ -2,9 +2,12 @@
   <div class="container">
     <Navigation></Navigation>
     <div class="cardList">
-      <div class="card" v-for="(item, index) in questionnaires" :key="index">
-        <div class="headerLine"></div>
-        <span class="title">{{ item.desc }}</span>
+      <div class="card" v-for="(item, index) in questionnaires" :key="index" @click="changeQuestionnaire(item.id)">
+        <div
+          class="headerLine"
+          :style="{ 'background-color': item.color }"
+        ></div>
+        <span class="title">{{ item.description }}</span>
         <div class="test-name">
           <span>{{ item.title }}</span>
           <span :class="['iconfont', item.icon]"></span>
@@ -14,7 +17,7 @@
     <div class="context">
       <div
         class="context-item"
-        v-for="(item, index) in questionnaires[order].questionList"
+        v-for="(item, index) in getQuestionList"
         :key="index"
       >
         <div class="title">
@@ -38,7 +41,10 @@
         <!-- 文本域输入 -->
         <div class="options-textarea options" v-if="item.type === 4"></div>
       </div>
-      <div class="submit" @click="submit">提交</div>
+      <div class="submitWrapper">
+        <div class="submit" @click="submit">提交</div>
+        <div class="reset" @click="reset">重置</div>
+      </div>
     </div>
     <el-dialog
       title="提示"
@@ -59,267 +65,24 @@
 
 <script>
 import Navigation from "../components/navigation.vue";
+import {getQuestionnaires,getResult} from "../request/api/questionnaire"
 export default {
   data() {
     return {
-      dialogVisible: false,//控制弹出框是否显示
-      report:'',//心理评测的结果
-      order: 0, //默认选择第一个问卷
+      dialogVisible: false, //控制弹出框是否显示
+      report: "", //心理评测的结果
+      order: 1, //默认选择第一个问卷,也是问卷的id
       typeMap: ["保留", "单选题", "多选题", "输入", "文本输入"],
-      questionnaires: [
-        {
-          title: "短式青少年抑郁量表测试 (SMFQ)",
-          desc: "TEST ONE",
-          icon: "icon-xiaoxi",
-          questionList: [
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你感到不快或沮丧吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你很难入睡，或者早醒吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你感到疲倦或没有活力吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你感到没有兴趣去做任何事情吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你感到自己很没有价值，或者觉得自己不如别人吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你经常感到焦虑或者紧张吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你经常感到愤怒或者易怒吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你很难集中精力，或者感到自己做事情效率低下吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label:
-                "过去两周，你感到生活没有希望，或者觉得自己的未来没有前途吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-            {
-              type: 1, //可选有radio单选框1，checkbox多选框2，input输入3，textarea文本输入4
-              label: "过去两周，你想过自杀吗?",
-              required: true, //是否必选
-              value: 0, //保存此问题的结果
-              options: [
-                {
-                  label: 1,
-                  value: "从不",
-                },
-                {
-                  label: 2,
-                  value: "有时",
-                },
-                {
-                  label: 3,
-                  value: "经常",
-                },
-                {
-                  label: 4,
-                  value: "总是",
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      questionnaires:[{questionList:[]}],//心理模板自测
     };
   },
   components: {
     Navigation,
+  },
+  computed: {
+    getQuestionList() {
+      return this.questionnaires[this.order-1].questionList;
+    },
   },
   methods: {
     handleClose(done) {
@@ -329,9 +92,21 @@ export default {
         })
         .catch((_) => {});
     },
-    submit() {
+    reset(){
+      this.questionnaires[this.order].questionList.forEach((item,index,arr)=>{
+        if(item.type=1){
+          item.value=0;
+        }else if(item.type=2){
+          item.value=[];
+        }else{
+          item.value='';
+        }
+      })
+      console.log(this.questionnaires[this.order].questionList)
+    },
+    async submit() {
       //提交用户填写表项，获取评分结果
-      const submitForm = this.questionnaires[this.order].questionList.map(
+      const submitForm = this.questionnaires[this.order-1].questionList.map(
         (item) => {
           return {
             value: item.value,
@@ -352,43 +127,31 @@ export default {
           return this.open(`您有必填项未填！(Q${i + 1})`);
         }
       }
-      let score = 0; //最后计算出来的分数
-      
-      //评分方法后面可以传到后端计算
-      submitForm.forEach((item, index) => {
-        switch (item.value) {
-          case 1:
-            score += 0;
-            break;
-          case 2:
-            score += 1;
-            break;
-          case 3:
-            score += 2;
-            break;
-          case 4:
-            score += 3;
-            break;
-        }
+      let data=await getResult({
+        id:this.order,
+        values:submitForm.map(item=>item.value)
       });
-      let report="";
-      if(score<=5){
-        report="正常"
-      }else if(score<=8){
-        report="轻度抑郁"
-      }else if(score<=11){
-        report="中度抑郁"
-      }else {
-        report="重度抑郁"
+      if(!data){
+        return this.open("心理测试结果获取失败！");
       }
-      this.report="经过SMFQ测试，你的抑郁状况是："+report;
-      this.dialogVisible=true;
-
+      this.report =  data;
+      this.dialogVisible = true;
+    },
+    async initQuestionnaires(){
+      let data=await getQuestionnaires();
+      console.log(data);
+      this.questionnaires=data;
+    },
+    changeQuestionnaire(id){
+      this.order=id;
     },
     open(message) {
       this.$message(message);
     },
   },
+  mounted(){
+    this.initQuestionnaires();
+  }
 };
 </script>
 
@@ -402,8 +165,11 @@ export default {
   .cardList {
     margin-top: 40px;
     margin-bottom: 30px;
+    display:flex;
     .card {
       width: 340px;
+      margin-right:40px;
+      cursor:pointer;
       display: flex;
       flex-direction: column;
       background-color: white;
@@ -413,7 +179,7 @@ export default {
       .headerLine {
         width: 100%;
         height: 4px;
-        background-color: #22d4bf;
+        //background-color: #22d4bf;
         box-shadow: 0 0 2px 2px #e0f3f0;
         border-radius: 2px;
         margin-bottom: 20px;
@@ -456,9 +222,13 @@ export default {
         margin-bottom: 20px;
       }
     }
-    .submit {
+    .submitWrapper{
+      display:flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    .submit,.reset {
+      margin-left:30px;
       width: 120px;
-      margin: 30px auto;
       padding: 10px 0;
       text-align: center;
       text-decoration: none;
@@ -467,6 +237,7 @@ export default {
       border-radius: 10px;
       cursor: pointer;
     }
+  }
   }
 }
 </style>

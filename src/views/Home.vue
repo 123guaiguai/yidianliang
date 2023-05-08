@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <Navigation></Navigation>
+    <Navigation ></Navigation>
     <el-carousel height="290px" loop>
       <el-carousel-item v-for="(item, index) in swiperList" :key="index">
         <img :src="item" alt="" class="swiperImg" />
@@ -119,6 +119,7 @@
 import Navigation from "../components/navigation.vue";
 import { sliceStr } from "../utils/sliceStr";
 import { mapMutations, mapState } from "vuex";
+import {getPsychologicalAssert} from "../request/api/questionnaire"
 import {
   getSwiperList,
   getCounselors,
@@ -171,6 +172,15 @@ export default {
         this.counselorList = counselorList;
       }
     },
+    async getPsychologicalAssert(){
+      let data=await getPsychologicalAssert();
+      this.updateMessage(data);
+      //console.log(data);
+      if(data&&!data.isShowed){
+        this.updateMessageCount(1);
+      }
+      //console.log(this.messageCount);
+    },
     async getArticles() {
       let data;
       if (this.cacheArticleList) {
@@ -190,15 +200,18 @@ export default {
       "updatecacheArticleList",
       "updatecacheCounselorList",
       "updatecacheSwiperList",
+      "updateMessageCount",
+      "updateMessage"
     ]),
   },
   mounted() {
     this.getSwiperList();
     this.getArticles();
     this.getCounselors();
+    this.getPsychologicalAssert();
   },
   computed: {
-    ...mapState(["cacheArticleList", "cacheCounselorList", "cacheSwiperList"]),
+    ...mapState(["cacheArticleList", "cacheCounselorList", "cacheSwiperList","messageCount"]),
   },
 };
 </script>

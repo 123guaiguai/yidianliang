@@ -13,6 +13,11 @@
             >
               <span class="text">{{ item.text }}</span>
               <span :class="['iconfont', item.title ? item.icon : '']"></span>
+              <span
+                class="messageCount"
+                v-if="messageCount && item.text === '消息'"
+                >{{ messageCount }}</span
+              >
             </div>
           </div>
         </el-aside>
@@ -21,7 +26,9 @@
             {{ showTitle }}
           </div>
           <div class="display-main-show">
-            <router-view></router-view>
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
           </div>
         </el-main>
       </el-container>
@@ -31,6 +38,7 @@
 
 <script>
 import navigation from "@/components/navigation.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     Navigation: navigation,
@@ -46,7 +54,7 @@ export default {
         { title: false, text: "绑定手机" },
         { title: true, text: "管理通知", icon: "icon-xiaoxi" },
         { title: false, text: "系统通知" },
-        { title: false, text: "消息" },
+        { title: false, text: "消息" ,path:"message"},
         { title: false, text: "评论回答" },
         { title: false, text: "私信聊天" },
         { title: true, text: "我的服务", icon: "icon--fuwu" },
@@ -71,6 +79,9 @@ export default {
       }
     },
   },
+  computed:{
+    ...mapState(['messageCount'])
+  }
 };
 </script>
 
@@ -117,6 +128,20 @@ export default {
           &:first-child {
             margin-top: 0px;
           }
+        }
+        .messageCount {
+          position: absolute;
+          background-color: rgb(243, 91, 91);
+          color: white;
+          border-radius: 50% 50%;
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          text-align: center;
+          line-height: 20px;
+          left: -13px;
+          top: 13px;
+          z-index: 99;
         }
       }
     }
