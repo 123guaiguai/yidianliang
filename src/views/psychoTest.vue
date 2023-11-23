@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="test_container">
     <Navigation></Navigation>
     <div class="cardList">
       <div class="card" v-for="(item, index) in questionnaires" :key="index" @click="changeQuestionnaire(item.id)">
@@ -156,7 +156,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.container {
+.test_container {
   width: 100%;
   display: flex;
   align-items: center;

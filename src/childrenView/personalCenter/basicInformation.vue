@@ -60,18 +60,18 @@ export default {
   },
   methods: {
     async getUserInformation() {
-      if (this.userInfo && !this.refresh) {
-        const { address, gender, introduce, username, picturePath } =
-          this.userInfo;
-        this.name = username;
-        this.city = address;
-        this.introduction = introduce;
-        this.gender = gender;
-        this.headerPhoto = picturePath
-          ? "http://8.130.92.216:8081/common/download?name=" + picturePath
-          : defaultImgUrl;
-        return;
-      }
+      // if (this.userInfo && !this.refresh) {
+      //   const { address, gender, introduce, username, picturePath } =
+      //     this.userInfo;
+      //   this.name = username;
+      //   this.city = address;
+      //   this.introduction = introduce;
+      //   this.gender = gender;
+      //   this.headerPhoto = picturePath
+      //     ? process.env.VUE_BASE_URL+"common/download?name=" + picturePath
+      //     : defaultImgUrl;
+      //   return;
+      // }
       let data = await getUserInfo();
       if (data) {
         const { address, gender, introduce, username, picturePath } = data;
@@ -80,7 +80,7 @@ export default {
         this.introduction = introduce;
         this.gender = gender;
         this.headerPhoto =
-          "http://8.130.92.216:8081/common/download?name=" + picturePath;
+        process.env.VUE_APP_BASE_URL+"common/download?name=" + picturePath;
         if (!picturePath) {
           this.headerPhoto =
           defaultImgUrl;
@@ -98,7 +98,7 @@ export default {
       this.$message(message);
     },
     faultImg(){
-      this.headerPhoto="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png";
+      this.headerPhoto=defaultImgUrl;
     },
     ...mapMutations(["updateUserInfo", "updateRefresh", "updateAvatarUrl"]),
   },
@@ -108,6 +108,12 @@ export default {
   mounted() {
     this.getUserInformation();
   },
+  activated(){
+    if(this.refresh){
+      this.getUserInformation()
+      this.updateRefresh(false)
+    }
+  }
 };
 </script>
 

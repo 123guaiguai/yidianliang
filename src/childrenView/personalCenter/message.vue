@@ -61,10 +61,10 @@ export default {
   .messageWrapper {
     background-color: white;
     border-radius: 10px;
+    margin-bottom: 40px;
     .message {
       width: 100%;
       height: 150px;
-
       display: flex;
       justify-content: space-around;
       align-items: center;

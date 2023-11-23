@@ -11,13 +11,12 @@ export default new Vuex.Store({
     userInfo:null,//用来保存请求得来的用户信息
     refresh:false,//用来控制是再次请求用户信息还是使用缓存
     avatarUrl:"",//保存用户头像地址
-    cacheArticleList:null,//用来缓存首页的最新热文信息
-    cacheCounselorList:null,//用来缓存首页的咨询师信息
-    cacheSwiperList:null,//用来缓存首页的轮播图信息
     cacheLastSignalData:null,//缓存最新一次的生理数据
     cacheSevenSignalData:null,//缓存最后七天的生理数据
     messageCount:0,//获取未读信息数量
     message:[],//保存消息
+    articles:[],//保存文章数据
+    counselorList:[],//用来保存咨询师信息
     // step:{
     //   counter:18081,
     //   minute:24,
@@ -29,6 +28,12 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
+    updateArticles(state,list){
+      state.articles=list;
+    },
+    updateCounselorList(state,list){
+      state.counselorList=list;
+    },
     updateMessage(state,val){
       state.message.push(val);
     },
@@ -37,15 +42,6 @@ export default new Vuex.Store({
       if(state.messageCount<0){
         state.messageCount=0;
       }
-    },
-    updatecacheArticleList(state,val){
-      state.cacheArticleList=val;
-    },
-    updatecacheCounselorList(state,val){
-      state.cacheCounselorList=val;
-    },
-    updatecacheSwiperList(state,val){
-      state.cacheSwiperList=val;
     },
     updatecacheLastSignalData(state,val){
       state.cacheLastSignalData=val;
@@ -72,7 +68,7 @@ export default new Vuex.Store({
       state.refresh=val;
     },
     updateAvatarUrl(state,val){
-      state.avatarUrl="http://8.130.92.216:8081/common/download?name="+val;
+      state.avatarUrl=process.env.VUE_APP_BASE_URL+"common/download?name="+val;
     }
   },
   actions: {

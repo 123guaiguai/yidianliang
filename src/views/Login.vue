@@ -38,10 +38,10 @@
                 autocomplete="off"
               ></el-input>
             </el-form-item>
-            <el-radio-group v-model="radio">
-              <el-radio :label="1">青少年</el-radio>
-              <el-radio :label="2">家长</el-radio>
-              <el-radio :label="3">医师</el-radio>
+            <el-radio-group v-model="radio" class="login-radio-group">
+              <el-radio :label="1" class="login-radio-item">青少年</el-radio>
+              <el-radio :label="2" class="login-radio-item">家长</el-radio>
+              <el-radio :label="3" class="login-radio-item">医师</el-radio>
             </el-radio-group>
             <!-- <el-form-item label="年龄" prop="age">
               <el-input v-model.number="ruleForm.age"></el-input>
@@ -408,7 +408,7 @@ export default {
   }
 }
 </style>
-<style>
+<style >
 .el-form-item__label {
   position: absolute;
   left: -0.0625rem;
@@ -431,10 +431,12 @@ export default {
 .el-radio-group {
   margin-bottom: 25px;
 }
+
 .el-radio__input.is-checked .el-radio__inner {
   border-color: #d4237a;
   background-color: #d4237a;
 }
+
 .el-radio__label {
   color: #f9f7f4;
 }

@@ -46,3 +46,16 @@ export function uploadAvatar(data){//上传用户头像
         data
     })
 }
+
+export function getCommunicationWithCounselor(){
+    return service({
+        url:'/message/',
+    })
+}
+
+export function sendSOS(){
+    return service({
+        url:"/sms/send",
+        method:'POST'
+    })
+}

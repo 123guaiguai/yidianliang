@@ -34,9 +34,9 @@ const routes = [
         component: () => import('../childrenView/personalCenter/modifyHeaderPhoto.vue')
       },
       {
-        path:'message',
-        name:'message',
-        component:()=>import('../childrenView/personalCenter/message.vue')
+        path: 'message',
+        name: 'message',
+        component: () => import('../childrenView/personalCenter/message.vue')
       }
     ]
   },
@@ -59,9 +59,30 @@ const routes = [
     component: () => import('../views/Signal.vue')
   },
   {
+    path: '/newSignal',
+    name: "signal",
+    component: () => import("../views/newSignal.vue")
+  },
+  {
     path: '/psychoTest',
     name: 'psychoTest',
     component: () => import('../views/psychoTest.vue')
+  }, {
+    path: "/article/:id?",
+    name: 'article',
+    component: () => import('../views/Article.vue')
+  }, {
+    path: "/chatroom",
+    name: "chatroom",
+    component: () => import("../views/ChatRoom.vue"),
+    redirect: '/chatroom/chat',
+    children: [
+      {
+        path: "chat/:id?",
+        name: "chat",
+        component: () => import("../childrenView/chatRoom/Chat.vue")
+      }
+    ]
   }
 ]
 

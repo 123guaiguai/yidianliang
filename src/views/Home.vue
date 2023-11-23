@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <Navigation ></Navigation>
+    <Navigation></Navigation>
     <el-carousel height="290px" loop>
       <el-carousel-item v-for="(item, index) in swiperList" :key="index">
         <img :src="item" alt="" class="swiperImg" />
@@ -24,12 +24,13 @@
       </div>
       <div class="exhibition">
         <!-- 这里是要v-for循环的 -->
-        <div
+        <router-link
+          :to="`/article/${item.id}`"
           class="exhibition-item"
           v-for="item in articlesList"
           :key="item.id"
         >
-          <img :src="item.picturePath" alt="" />
+          <img :src="item.avator" alt="" />
           <div class="text">
             <div class="article-title">
               {{ item.title }}
@@ -38,7 +39,7 @@
               {{ item.content }}
             </div>
           </div>
-        </div>
+        </router-link>
       </div>
     </div>
     <!-- 心理医师预约模块 -->
@@ -70,7 +71,7 @@
                 {{ item.introduce }}
               </div>
             </div>
-            <div class="consultation">咨询我</div>
+            <router-link class="consultation" :to="`/chatroom/chat/${item.id}`">咨询我</router-link>
           </div>
         </div>
       </div>
@@ -94,7 +95,9 @@
               <span class="icon-free">免费</span>
               <span class="number">1920人测试过</span>
             </div>
-            <div class="test-btn" @click="$router.push('/psychoTest')">去测试</div>
+            <div class="test-btn" @click="$router.push('/psychoTest')">
+              去测试
+            </div>
           </div>
           <div class="card">
             <img
@@ -119,13 +122,14 @@
 import Navigation from "../components/navigation.vue";
 import { sliceStr } from "../utils/sliceStr";
 import { mapMutations, mapState } from "vuex";
-import {getPsychologicalAssert} from "../request/api/questionnaire"
+import { getPsychologicalAssert } from "../request/api/questionnaire";
 import {
   getSwiperList,
   getCounselors,
   getArticles,
 } from "../request/api/index";
 import { articlesList, counselorList, swiperList } from "../source";
+import { getUserInfo } from '@/request/api/person';
 export default {
   components: {
     Navigation: Navigation,
@@ -139,69 +143,108 @@ export default {
   },
   methods: {
     async getSwiperList() {
-      let data;
-      if (this.cacheSwiperList) {
-        data = this.cacheSwiperList;
-      } else {
-        data = await getSwiperList();
+      let data = await getSwiperList();
+      // if (this.cacheSwiperList) {
+      //   data = this.cacheSwiperList;
+      // } else {
+      //   data = await getSwiperList();
 
-        //缓存轮播图信息
-        this.updatecacheSwiperList(data);
-      }
-
-      if (data) {
-        this.swiperList = data;
-      } else {
-        this.swiperList = swiperList;
-      }
+      //   //缓存轮播图信息
+      //   this.updatecacheSwiperList(data);
+      // }
+      this.swiperList = data;
+      // if (data) {
+      //   this.swiperList = data;
+      // } else {
+      //   this.swiperList = swiperList;
+      // }
     },
     async getCounselors() {
-      let data;
-      if (this.cacheCounselorList) {
-        data = this.cacheCounselorList;
-      } else {
-        data = await getCounselors();
-        this.updatecacheCounselorList(data);
-      }
+      let data = await getCounselors();
+      // if (this.cacheCounselorList) {
+      //   data = this.cacheCounselorList;
+      // } else {
+      //   data = await getCounselors();
+      //   this.updatecacheCounselorList(data);
+      // }
       if (data) {
         data.forEach((item) => {
           item.introduce = sliceStr(item.introduce);
         });
         this.counselorList = data;
+        this.updateCounselorList(data);
       } else {
         this.counselorList = counselorList;
       }
     },
-    async getPsychologicalAssert(){
-      let data=await getPsychologicalAssert();
+    async getPsychologicalAssert() {
+      let data = await getPsychologicalAssert();
+      //console.log(data);
       this.updateMessage(data);
       //console.log(data);
-      if(data&&!data.isShowed){
+      if (data && !data.isShowed) {
         this.updateMessageCount(1);
       }
+      this.updateMessageCount(1);
       //console.log(this.messageCount);
     },
     async getArticles() {
-      let data;
-      if (this.cacheArticleList) {
-        data = this.cacheArticleList;
-      } else {
-        data = await getArticles();
-        //缓存最新热文
-        this.updatecacheArticleList(data);
-      }
+      let data = await getArticles();
+      // if (this.cacheArticleList) {
+      //   data = this.cacheArticleList;
+      // } else {
+      //   data = await getArticles();
+      //   //缓存最新热文
+      //   this.updatecacheArticleList(data);
+      //   this.updateArticles(data)
+      // }
       if (data) {
         this.articlesList = data;
+        this.updateArticles(data);
+      }
+    },
+    async getUserInformation() {
+      // if (this.userInfo && !this.refresh) {
+      //   const { address, gender, introduce, username, picturePath } =
+      //     this.userInfo;
+      //   this.name = username;
+      //   this.city = address;
+      //   this.introduction = introduce;
+      //   this.gender = gender;
+      //   this.headerPhoto = picturePath
+      //     ? process.env.VUE_BASE_URL+"common/download?name=" + picturePath
+      //     : defaultImgUrl;
+      //   return;
+      // }
+      let data = await getUserInfo();
+      if (data) {
+        // const { address, gender, introduce, username, picturePath } = data;
+        // this.name = username;
+        // this.city = address;
+        // this.introduction = introduce;
+        // this.gender = gender;
+        // this.headerPhoto =
+        //   process.env.VUE_APP_BASE_URL + "common/download?name=" + picturePath;
+        // if (!picturePath) {
+        //   this.headerPhoto = defaultImgUrl;
+        //   data.picturePath = defaultImgUrl;
+        // }
+        this.updateUserInfo(data); //缓存用户信息
+        this.updateAvatarUrl(data.picturePath);
       } else {
-        this.articlesList = articlesList;
+        this.open("用户数据请求失败！");
       }
     },
     ...mapMutations([
-      "updatecacheArticleList",
-      "updatecacheCounselorList",
-      "updatecacheSwiperList",
+      // "updatecacheArticleList",
+      // "updatecacheCounselorList",
+      // "updatecacheSwiperList",
       "updateMessageCount",
-      "updateMessage"
+      "updateMessage",
+      "updateArticles",
+      "updateCounselorList",
+      "updateUserInfo",
+      "updateAvatarUrl",
     ]),
   },
   mounted() {
@@ -209,9 +252,15 @@ export default {
     this.getArticles();
     this.getCounselors();
     this.getPsychologicalAssert();
+    this.getUserInformation();
   },
   computed: {
-    ...mapState(["cacheArticleList", "cacheCounselorList", "cacheSwiperList","messageCount"]),
+    ...mapState([
+      // "cacheArticleList",
+      // "cacheCounselorList",
+      // "cacheSwiperList",
+      "messageCount",
+    ]),
   },
 };
 </script>
@@ -359,7 +408,6 @@ export default {
           font-size: 16px;
           color: #999;
           transition: all 0.4s;
-          
         }
       }
       .psychologist {

@@ -1,62 +1,64 @@
 <template>
-  <div class="main-container">
-    <Navigation></Navigation>
-    <div class="signal-container">
-      <!-- <span class="iconfont icon-fanhui5" @click="$router.go(-1)"></span> -->
-      <div class="step">
-        <div class="step-ring">
-          <div class="step-counter"></div>
-          <div class="step-time"></div>
+  <div>
+    <div class=" h-full" style="background-color: #f3f4f5">
+      <Navigation></Navigation>
+      <div class="signal-container">
+        <!-- <span class="iconfont icon-fanhui5" @click="$router.go(-1)"></span> -->
+        <div class="step">
+          <div class="step-ring">
+            <div class="step-counter"></div>
+            <div class="step-time"></div>
+          </div>
+          <span class="step-show">
+            距离 {{ step.distance }} 公里 | 热量 {{ step.heat }} 千卡 | 爬楼
+            {{ step.climb }} 米
+          </span>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-xinxikongxin"></use>
+          </svg>
         </div>
-        <span class="step-show">
-          距离 {{ step.distance }} 公里 | 热量 {{ step.heat }} 千卡 | 爬楼
-          {{ step.climb }} 米
-        </span>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-xinxikongxin"></use>
-        </svg>
+        <div class="navigation">
+          <ul>
+            <li @click="showTip('high')">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-S_mingyiwenzhengaoxieyazhuanqu1"></use>
+              </svg>
+              <span>最高血压</span>
+            </li>
+            <li @click="showTip('low')">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-S_mingyiwenzhengaoxieyazhuanqu"></use>
+              </svg>
+              <span>最低血压</span>
+            </li>
+            <li @click="showTip('heart')">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-tubiaozhizuomoban"></use>
+              </svg>
+              <span>心率</span>
+            </li>
+            <li @click="showTip('sleep')">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-shuimian"></use>
+              </svg>
+              <span>睡眠时间</span>
+            </li>
+            <li @click="showTip('temp')">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-wendu"></use>
+              </svg>
+              <span>温度</span>
+            </li>
+          </ul>
+        </div>
+        <div class="heart-rate"></div>
+        <div class="blood-rate"></div>
+        <div class="sleep-time"></div>
+        <lastSignalPanelVue
+          ref="lastSignal"
+          :lastData="lastSignal"
+        ></lastSignalPanelVue>
       </div>
-      <div class="navigation">
-        <ul>
-          <li @click="showTip('high')">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-S_mingyiwenzhengaoxieyazhuanqu1"></use>
-            </svg>
-            <span>最高血压</span>
-          </li>
-          <li @click="showTip('low')">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-S_mingyiwenzhengaoxieyazhuanqu"></use>
-            </svg>
-            <span>最低血压</span>
-          </li>
-          <li @click="showTip('heart')">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-tubiaozhizuomoban"></use>
-            </svg>
-            <span>心率</span>
-          </li>
-          <li @click="showTip('sleep')">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-shuimian"></use>
-            </svg>
-            <span>睡眠时间</span>
-          </li>
-          <li @click="showTip('temp')">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-wendu"></use>
-            </svg>
-            <span>温度</span>
-          </li>
-        </ul>
-      </div>
-      <div class="heart-rate"></div>
-      <div class="blood-rate"></div>
-      <div class="sleep-time"></div>
-      <lastSignalPanelVue
-        ref="lastSignal"
-        :lastData="lastSignal"
-      ></lastSignalPanelVue>
     </div>
   </div>
 </template>
@@ -553,179 +555,175 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.main-container{
-  background: rgba(242, 242, 244);
-  height:100vh;
 .signal-container {
-  width: 100%;
-  // height: 100%;
-  padding: 2px;
-  position: relative;
-  overflow-x: hidden;
-  //   display: flex;
-  //   flex-direction: column;
-  //   justify-content: center;
-  //   align-items: center;
-  .icon-fanhui5 {
-    position: absolute;
-    color: #0b8bff;
-    font-size: 50px;
-    left: 30px;
-    top: 40px;
-  }
-  .step {
-    margin: 20px auto;
-    width: 420px;
-    height: 250px;
+    width: 100%;
+    // height: 100%;
+    padding: 2px;
     position: relative;
-    background-image: linear-gradient(
-      to top,
-      #ee6909,
-      #f27e14,
-      #f79122,
-      #faa431,
-      #feb641
-    );
-    border-radius: 10px;
-    .step-ring {
-      width: 80%;
-      height: 80%;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      .step-counter {
-        width: 45%;
-        height: 80%;
-        position: relative;
-        &::before {
-          content: "步数";
-          position: absolute;
-          top: 25%;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 11px;
-          color: rgb(240, 221, 202);
-        }
-        &::after {
-          content: "步";
-          position: absolute;
-          bottom: 25%;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 11px;
-          color: rgb(240, 221, 202);
-        }
-      }
-      .step-time {
-        width: 45%;
-        height: 80%;
-        position: relative;
-        &::before {
-          content: "中高强度";
-          position: absolute;
-          top: 25%;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 11px;
-          color: rgb(240, 221, 202);
-        }
-        &::after {
-          content: "分钟";
-          position: absolute;
-          bottom: 25%;
-          left: 50%;
-          transform: translateX(-50%);
-          font-size: 11px;
-          color: rgb(240, 221, 202);
-        }
-      }
-    }
-    .step-show {
-      display: block;
-      width: 300px;
-      text-align: center;
-      color: rgba(243, 210, 186);
-      font-size: 13px;
-      margin: 10px auto;
-    }
-    .icon {
+    overflow-x: hidden;
+    //   display: flex;
+    //   flex-direction: column;
+    //   justify-content: center;
+    //   align-items: center;
+    .icon-fanhui5 {
       position: absolute;
-      top: 5px;
-      right: 5px;
-      width: 20px;
-      height: 20px;
+      color: #0b8bff;
+      font-size: 50px;
+      left: 30px;
+      top: 40px;
     }
-  }
-  .navigation {
-    width: 470px;
-    height: 100px;
-    background: #ffff;
-    border-radius: 20px;
-    box-shadow: 0 0 4px 4px #f3f3f3;
-    margin: 50px auto;
-    ul {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      li {
+    .step {
+      margin: 20px auto;
+      width: 420px;
+      height: 250px;
+      position: relative;
+      background-image: linear-gradient(
+        to top,
+        #ee6909,
+        #f27e14,
+        #f79122,
+        #faa431,
+        #feb641
+      );
+      border-radius: 10px;
+      .step-ring {
+        width: 80%;
+        height: 80%;
+        margin: 0 auto;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: space-around;
-        .icon {
-          width: 40px;
-          height: 40px;
-          margin-left: 6px;
+        justify-content: space-between;
+        align-items: center;
+        .step-counter {
+          width: 45%;
+          height: 80%;
+          position: relative;
+          &::before {
+            content: "步数";
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgb(240, 221, 202);
+          }
+          &::after {
+            content: "步";
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgb(240, 221, 202);
+          }
         }
-        .icon:hover + span {
-          color: #ee6909;
+        .step-time {
+          width: 45%;
+          height: 80%;
+          position: relative;
+          &::before {
+            content: "中高强度";
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgb(240, 221, 202);
+          }
+          &::after {
+            content: "分钟";
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgb(240, 221, 202);
+          }
         }
-        span {
-          display: block;
-          text-align: center;
-          margin-top: 4px;
-          font-size: 13px;
-          transition: all 0.3s;
-        }
-        span:hover {
-          color: #ee6909;
-          cursor: pointer;
+      }
+      .step-show {
+        display: block;
+        width: 300px;
+        text-align: center;
+        color: rgba(243, 210, 186);
+        font-size: 13px;
+        margin: 10px auto;
+      }
+      .icon {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .navigation {
+      width: 470px;
+      height: 100px;
+      background: #ffff;
+      border-radius: 20px;
+      box-shadow: 0 0 4px 4px #f3f3f3;
+      margin: 50px auto;
+      ul {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        li {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: space-around;
+          .icon {
+            width: 40px;
+            height: 40px;
+            margin-left: 6px;
+          }
+          .icon:hover + span {
+            color: #ee6909;
+          }
+          span {
+            display: block;
+            text-align: center;
+            margin-top: 4px;
+            font-size: 13px;
+            transition: all 0.3s;
+          }
+          span:hover {
+            color: #ee6909;
+            cursor: pointer;
+          }
         }
       }
     }
+    .heart-rate {
+      width: 500px;
+      height: 300px;
+      margin: 20px auto;
+      background: #ffff;
+      border-radius: 30px;
+      box-shadow: 0 0 4px 4px #f3f3f3;
+    }
+    .blood-rate {
+      width: 420px;
+      height: 350px;
+      background: #ffff;
+      border-radius: 30px;
+      box-shadow: 0 0 4px 4px #f3f3f3;
+      position: absolute;
+      left: 20px;
+      bottom: 50px;
+    }
+    .sleep-time {
+      width: 420px;
+      height: 350px;
+      background: #ffff;
+      border-radius: 30px;
+      box-shadow: 0 0 4px 4px #f3f3f3;
+      position: absolute;
+      right: 20px;
+      bottom: 50px;
+      transition: all 0.3s;
+    }
   }
-  .heart-rate {
-    width: 500px;
-    height: 300px;
-    margin: 20px auto;
-    background: #ffff;
-    border-radius: 30px;
-    box-shadow: 0 0 4px 4px #f3f3f3;
-  }
-  .blood-rate {
-    width: 420px;
-    height: 350px;
-    background: #ffff;
-    border-radius: 30px;
-    box-shadow: 0 0 4px 4px #f3f3f3;
-    position: absolute;
-    left: 20px;
-    bottom: 50px;
-  }
-  .sleep-time {
-    width: 420px;
-    height: 350px;
-    background: #ffff;
-    border-radius: 30px;
-    box-shadow: 0 0 4px 4px #f3f3f3;
-    position: absolute;
-    right: 20px;
-    bottom: 50px;
-    transition: all 0.3s;
-  }
-}
-}
 </style>
